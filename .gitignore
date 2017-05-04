@@ -2,3 +2,4 @@ TREC/
 target/
 .idea/
 Indexer.iml
+*.ser

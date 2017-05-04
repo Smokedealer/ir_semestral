@@ -15,16 +15,8 @@ public class PostingsList implements Serializable{
         this.postingsTree = new ArrayList<>();
     }
 
-    public void addItem(final int documentId) {
-        for(Posting p : postingsTree) {
-            if(p.getDocumentId() == documentId){
-                return;
-            }else if(p.getDocumentId() > documentId) {
-                break;
-            }
-        }
-
-        postingsTree.add(new Posting(documentId));
+    public void addPosting(final Posting posting) {
+        postingsTree.add(posting);
     }
 
 }

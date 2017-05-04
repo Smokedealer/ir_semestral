@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 
 import java.io.*;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,7 +21,7 @@ public class IndexDictionary implements Serializable {
         this.dictionary = new HashMap<>();
     }
 
-    public void add(final List<String> terms, final String documentId) {
+    public void add(final Map<String, Integer> termFrequencyMap, final String documentId) {
 
         int id;
 
@@ -33,19 +32,19 @@ public class IndexDictionary implements Serializable {
             stringIntIdMap.put(documentId, id);
         }
 
-        for(String term : terms) {
-            add(term, id);
+        for(Map.Entry<String, Integer> termFrequencyPair : termFrequencyMap.entrySet()) {
+            add(termFrequencyPair, id);
         }
     }
 
-    public void add(final String term,final int documentId){
+    public void add(final Map.Entry<String, Integer> termFrequencyPair, final int documentId){
 
-        PostingsList postingsList = this.dictionary.get(term);
+        PostingsList postingsList = this.dictionary.get(termFrequencyPair.getKey());
         if(postingsList == null){
             postingsList = new PostingsList();
-            this.dictionary.put(term, postingsList);
+            this.dictionary.put(termFrequencyPair.getKey(), postingsList);
         }
-        postingsList.addItem(documentId);
+        postingsList.addPosting(new Posting(documentId, termFrequencyPair.getValue()));
     }
 
     public static boolean save(final String fileName, final IndexDictionary dictionary) {

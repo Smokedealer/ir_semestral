@@ -8,9 +8,11 @@ import java.io.Serializable;
 public class Posting implements Comparable<Posting>, Serializable {
 
     private int documentId;
+    private int frequency;
 
-    public Posting(int documentId) {
+    public Posting(int documentId, int frequency) {
         this.documentId = documentId;
+        this.frequency = frequency;
     }
 
     public int getDocumentId() {

@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.cz.CzechAnalyzer;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author msip
@@ -33,7 +34,6 @@ public class Index implements Indexer, Searcher {
         for(Document doc : documents) {
             addToIndex(doc);
         }
-        saveDictionary();
     }
 
     public boolean loadDictionary() {
@@ -53,10 +53,9 @@ public class Index implements Indexer, Searcher {
     }
 
 
-
     public void addToIndex(final Document document) {
-        List terms = tokenizer.tokenizeText(document.getText());
-        dictionary.add(terms, document.getId());
+        Map<String, Integer> termFrequencyMap = tokenizer.getTerms(document.getText());
+        dictionary.add(termFrequencyMap, document.getId());
     }
 
     public List<Result> search(String query) {

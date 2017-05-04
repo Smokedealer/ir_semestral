@@ -8,7 +8,9 @@ import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by msip on 5/4/17.
@@ -23,15 +25,22 @@ public class Tokenizer {
         this.analyzer = analyzer;
     }
 
-    public List<String> tokenizeText(String text) {
+    public Map<String, Integer> getTerms(String text) {
+
         // todo check if removes stop words
-        List<String> tokens = new ArrayList<String>();
+        Map<String, Integer> terms = new HashMap<>();
 
         try {
             TokenStream tokenStream = analyzer.tokenStream(null, new StringReader(text));
             tokenStream.reset();
             while (tokenStream.incrementToken()){
-                tokens.add(tokenStream.getAttribute(CharTermAttribute.class).toString());
+                String term = tokenStream.getAttribute(CharTermAttribute.class).toString();
+                Integer termCount = terms.get(term);
+                if(termCount == null) {
+                    terms.put(term, 1);
+                }else{
+                    terms.put(term, termCount + 1);
+                }
             }
             tokenStream.end();
             tokenStream.close();
@@ -41,6 +50,6 @@ public class Tokenizer {
         }
 
 
-        return tokens;
+        return terms;
     }
 }

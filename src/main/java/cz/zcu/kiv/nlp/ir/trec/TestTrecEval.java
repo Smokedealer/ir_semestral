@@ -66,14 +66,20 @@ public class TestTrecEval {
 
         log.info("Documents: " + documents.size());
 
-        long startTime = System.currentTimeMillis();
 
         if(!index.loadDictionary()){
+
+            long startTime = System.currentTimeMillis();
+
             index.index(documents); // start indexing if loading of dictionary fails
+
+            long endTime = System.currentTimeMillis();
+            log.info("Index finished: " + (endTime- startTime)/1000 + " seconds");
+
+            index.saveDictionary();
         }
 
-        long endTime = System.currentTimeMillis();
-        log.info("Index finished: " + (endTime- startTime)/1000 + " seconds");
+
 
 
         List<String> lines = new ArrayList<String>();

@@ -13,12 +13,19 @@ public class IndexDictionary implements Serializable {
 
     private static final Logger LOGGER = Logger.getLogger(IndexDictionary.class);
 
+    private static IndexDictionary INSTANCE;
+
     private Map<String, Integer> stringIntIdMap;
     private Map<String, PostingsList> dictionary;
 
     public IndexDictionary() {
+        IndexDictionary.INSTANCE = this;
         this.stringIntIdMap = new HashMap<>();
         this.dictionary = new HashMap<>();
+    }
+
+    public static IndexDictionary getInstance() {
+        return IndexDictionary.INSTANCE;
     }
 
     public void add(final Map<String, Integer> termFrequencyMap, final String documentId) {
@@ -35,6 +42,10 @@ public class IndexDictionary implements Serializable {
         for(Map.Entry<String, Integer> termFrequencyPair : termFrequencyMap.entrySet()) {
             add(termFrequencyPair, id);
         }
+    }
+
+    public PostingsList getPostings(final String term) {
+        return this.dictionary.get(term);
     }
 
     public void add(final Map.Entry<String, Integer> termFrequencyPair, final int documentId){

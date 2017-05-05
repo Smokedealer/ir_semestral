@@ -3,6 +3,7 @@ package cz.zcu.kiv.nlp.ir.trec;
 import cz.zcu.kiv.nlp.ir.trec.data.Document;
 import cz.zcu.kiv.nlp.ir.trec.data.Result;
 import cz.zcu.kiv.nlp.ir.trec.dataStructures.IndexDictionary;
+import cz.zcu.kiv.nlp.ir.trec.logic.QParser;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.cz.CzechAnalyzer;
@@ -20,10 +21,12 @@ public class Index implements Indexer, Searcher {
 
     private static final String DICTIONARY_NAME = "./indexDictionary.ser";
 
+    private QParser parser;
     private Tokenizer tokenizer;
     private IndexDictionary dictionary;
 
     public Index() {
+        this.parser = new QParser();
         this.tokenizer = new Tokenizer(new CzechAnalyzer());
         this.dictionary = new IndexDictionary();
     }

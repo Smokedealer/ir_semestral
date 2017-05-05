@@ -1,16 +1,12 @@
 package cz.zcu.kiv.nlp.ir.trec;
 
 import cz.zcu.kiv.nlp.ir.trec.data.*;
+import cz.zcu.kiv.nlp.ir.trec.dataStructures.PostingsList;
+import cz.zcu.kiv.nlp.ir.trec.logic.QParser;
+import cz.zcu.kiv.nlp.ir.trec.logic.Query;
 import org.apache.log4j.*;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.*;
 import java.io.*;
-import java.text.ParseException;
 import java.util.*;
 
 
@@ -66,7 +62,6 @@ public class TestTrecEval {
 
         log.info("Documents: " + documents.size());
 
-
         if(!index.loadDictionary()){
 
             long startTime = System.currentTimeMillis();
@@ -76,8 +71,12 @@ public class TestTrecEval {
             long endTime = System.currentTimeMillis();
             log.info("Index finished: " + (endTime- startTime)/1000 + " seconds");
 
-            index.saveDictionary();
+            //index.saveDictionary();
         }
+
+        QParser p = new QParser();
+        Query query = p.parseQuery("(pornografie OR prdel OR jebat) AND zdarma");
+        PostingsList list = query.execute();
 
 
 

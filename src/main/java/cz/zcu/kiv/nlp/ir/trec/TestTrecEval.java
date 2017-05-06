@@ -75,7 +75,7 @@ public class TestTrecEval {
         }
 
         QParser p = new QParser();
-        Query query = p.parseQuery("(pornografie OR prdel OR jebat) AND zdarma");
+        Query query = p.parseQuery("(pornografie AND zdarma AND web) OR (martin AND sex)");
         PostingsList list = query.execute();
 
 

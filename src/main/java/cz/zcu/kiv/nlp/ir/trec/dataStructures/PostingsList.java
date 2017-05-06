@@ -34,6 +34,10 @@ public class PostingsList implements Serializable{
         return this.postings.size();
     }
 
+    public static PostingsList notOperation(final PostingsList first, final PostingsList second) {
+        return null;
+    }
+
     public static PostingsList orOperation(final PostingsList first, final PostingsList second) {
         if(first == null && second == null) {
             return null;
@@ -42,7 +46,31 @@ public class PostingsList implements Serializable{
         } else if(second == null){
             return new PostingsList(first);
         } else{
-            return first;
+            PostingsList result = new PostingsList();
+
+            List<Posting> firstList = first.getPostings();
+            List<Posting> secondList = second.getPostings();
+
+
+            int i1 = 0, i2 = 0;
+            while(i1 < firstList.size() && i2 < secondList.size()){
+                if(firstList.get(i1).getDocumentId() == secondList.get(i2).getDocumentId()) {
+                    // todo solve merge
+                    result.addPosting(firstList.get(i1));
+                    i1++; i2++;
+                }else if(firstList.get(i1).getDocumentId() < secondList.get(i2).getDocumentId()){
+                    result.addPosting(firstList.get(i1));
+                    i1++;
+                }else {
+                    result.addPosting(secondList.get(i2));
+                    i2++;
+                }
+            }
+
+            while (i1 < firstList.size()) {result.addPosting(firstList.get(i1++));}
+            while (i2 < secondList.size()) {result.addPosting(secondList.get(i2++));}
+
+            return result;
         }
     }
 
@@ -63,6 +91,7 @@ public class PostingsList implements Serializable{
             int i1 = 0, i2 = 0;
             while(i1 < firstList.size() && i2 < secondList.size()) {
                 if(firstList.get(i1).getDocumentId() == secondList.get(i2).getDocumentId()){
+                    // todo solve merge
                     result.addPosting(firstList.get(i1));
                     i1++; i2++;
                 }else if(firstList.get(i1).getDocumentId() < secondList.get(i2).getDocumentId()) {

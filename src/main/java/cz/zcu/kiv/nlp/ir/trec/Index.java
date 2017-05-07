@@ -6,11 +6,11 @@ import cz.zcu.kiv.nlp.ir.trec.dataStructures.IndexDictionary;
 import cz.zcu.kiv.nlp.ir.trec.dataStructures.PostingsList;
 import cz.zcu.kiv.nlp.ir.trec.logic.QParser;
 import cz.zcu.kiv.nlp.ir.trec.logic.Query;
+import cz.zcu.kiv.nlp.ir.trec.logic.Tokenizer;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.cz.CzechAnalyzer;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -37,9 +37,13 @@ public class Index implements Indexer, Searcher {
 
     public void index(final List<Document> documents) {
         LOGGER.info("Creating new IndexDictionary");
+        long startTime = System.currentTimeMillis();
         for(Document doc : documents) {
             addToIndex(doc);
         }
+        long endTime = System.currentTimeMillis();
+        LOGGER.info("Index finished after: " + (endTime- startTime)/1000 + " seconds");
+
     }
 
     public boolean loadDictionary() {
@@ -66,7 +70,6 @@ public class Index implements Indexer, Searcher {
 
     public List<Result> search(String query) {
         Query q = parser.parseQuery(query);
-        PostingsList lists = q.execute(dictionary);
-        return null;
+        return q.execute(dictionary);
     }
 }

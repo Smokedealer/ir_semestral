@@ -1,7 +1,5 @@
 package cz.zcu.kiv.nlp.ir.trec.logic;
 
-import cz.zcu.kiv.nlp.ir.trec.dataStructures.IndexDictionary;
-import cz.zcu.kiv.nlp.ir.trec.dataStructures.PostingsList;
 import org.apache.lucene.analysis.cz.CzechAnalyzer;
 import org.apache.lucene.queryparser.flexible.core.QueryNodeException;
 import org.apache.lucene.queryparser.flexible.precedence.PrecedenceQueryParser;

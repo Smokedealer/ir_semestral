@@ -63,27 +63,14 @@ public class TestTrecEval {
         log.info("Documents: " + documents.size());
 
         if(!index.loadDictionary()){
-
-            long startTime = System.currentTimeMillis();
-
             index.index(documents); // start indexing if loading of dictionary fails
-
-            long endTime = System.currentTimeMillis();
-            log.info("Index finished: " + (endTime- startTime)/1000 + " seconds");
-
             //index.saveDictionary();
         }
 
-          index.search("pornografie AND zdarma AND web");
-//        QParser p = new QParser();
-//        Query query = p.parseQuery("(pornografie AND zdarma AND web) OR (martin AND sex)");
-//        PostingsList list = query.execute();
-
-
-
-
         List<String> lines = new ArrayList<String>();
 
+        log.info("Searching topics");
+        long startTime = System.currentTimeMillis();
         for (Topic t : topics) {
             List<Result> resultHits = index.search(t.getTitle() + " " + t.getDescription());
 
@@ -104,6 +91,10 @@ public class TestTrecEval {
                 lines.add(t.getId() + " Q0 " + "abc" + " " + "99" + " " + 0.0 + " runindex1");
             }
         }
+        long endTime = System.currentTimeMillis();
+        log.info("Searching finished after: " + (endTime- startTime)/1000 + " seconds");
+
+
         final File outputFile = new File(OUTPUT_DIR + "/results " + SerializedDataHelper.SDF.format(System.currentTimeMillis()) + ".txt");
         IOUtils.saveFile(outputFile, lines);
         //try to run evaluation
@@ -118,7 +109,7 @@ public class TestTrecEval {
 
         String commandLine = "./trec_eval.8.1/./trec_eval" +
                 " ./trec_eval.8.1/czech" +
-                " " + predictedFile;
+                " \'" + predictedFile + '\'';
 
         System.out.println(commandLine);
         Process process = Runtime.getRuntime().exec(commandLine);

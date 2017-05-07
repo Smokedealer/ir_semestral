@@ -15,17 +15,23 @@ public class IndexDictionary implements Serializable {
 
     private static IndexDictionary INSTANCE;
 
+    private Map<Integer, String> intStringIdMap;
     private Map<String, Integer> stringIntIdMap;
     private Map<String, PostingsList> dictionary;
 
     public IndexDictionary() {
         IndexDictionary.INSTANCE = this;
+        this.intStringIdMap = new HashMap<>();
         this.stringIntIdMap = new HashMap<>();
         this.dictionary = new HashMap<>();
     }
 
     public static IndexDictionary getInstance() {
         return IndexDictionary.INSTANCE;
+    }
+
+    public int getSize(){
+        return this.dictionary.size();
     }
 
     public void add(final Map<String, Integer> termFrequencyMap, final String documentId) {
@@ -36,12 +42,17 @@ public class IndexDictionary implements Serializable {
             id = stringIntIdMap.get(documentId);
         }else {
             id = stringIntIdMap.size();
+            intStringIdMap.put(id, documentId);
             stringIntIdMap.put(documentId, id);
         }
 
         for(Map.Entry<String, Integer> termFrequencyPair : termFrequencyMap.entrySet()) {
             add(termFrequencyPair, id);
         }
+    }
+
+    public String getStringId(int intId) {
+        return intStringIdMap.get(intId);
     }
 
     public PostingsList getPostings(final String term) {

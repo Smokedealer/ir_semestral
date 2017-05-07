@@ -1,10 +1,7 @@
 package cz.zcu.kiv.nlp.ir.trec.dataStructures;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by msip on 5/4/17.
@@ -31,11 +28,15 @@ public class PostingsList implements Serializable{
 
     public void addPosting(final Posting posting) {
         if(term != null){
-            term.docFreq += posting.getTermFrequency();
-            posting.setTerm(term);
+            term.docFreq += 1;
         }
 
         postings.add(posting);
+    }
+
+    public Posting getDocumentPosting(int documentId) {
+        int id = Collections.binarySearch(postings, new Posting(documentId, -1), new PostingComparator());
+        return id < 0 ? null : postings.get(id);
     }
 
     public List<Posting> getPostings() {
@@ -68,7 +69,6 @@ public class PostingsList implements Serializable{
             while(i1 < firstList.size() && i2 < secondList.size()){
                 if(firstList.get(i1).getDocumentId() == secondList.get(i2).getDocumentId()) {
                     result.addPosting(firstList.get(i1));
-                    result.addPosting(secondList.get(i2));
                     i1++; i2++;
                 }else if(firstList.get(i1).getDocumentId() < secondList.get(i2).getDocumentId()){
                     result.addPosting(firstList.get(i1));
@@ -105,19 +105,8 @@ public class PostingsList implements Serializable{
             int i1 = 0, i2 = 0;
             while(i1 < firstList.size() && i2 < secondList.size()) {
                 if(firstList.get(i1).getDocumentId() == secondList.get(i2).getDocumentId()){
-                    int id = firstList.get(i1).getDocumentId();
                     result.addPosting(firstList.get(i1));
-                    result.addPosting(secondList.get(i2));
                     i1++; i2++;
-
-                    while(i1 < firstList.size() && firstList.get(i1).getDocumentId() == id){
-                        result.addPosting(firstList.get(i1++));
-                    }
-
-                    while(i2 < secondList.size() && secondList.get(i2).getDocumentId() == id){
-                        result.addPosting(secondList.get(i2++));
-                    }
-
                 }else if(firstList.get(i1).getDocumentId() < secondList.get(i2).getDocumentId()) {
                     i1++;
                 }else {

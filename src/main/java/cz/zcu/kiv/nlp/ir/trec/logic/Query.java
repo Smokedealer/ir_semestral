@@ -29,7 +29,7 @@ public class Query {
         this.children.get(occur).add(child);
     }
 
-    public PostingsList execute() {
+    public PostingsList execute(final IndexDictionary dictionary) {
         if(isTerm){
             return IndexDictionary.getInstance().getPostings(this.text);
         }else {
@@ -39,12 +39,12 @@ public class Query {
                 switch (childOccurence.getKey()) {
                     case MUST:
                         for(Query child : childOccurence.getValue()) {
-                            result = PostingsList.andOperation(result, child.execute());
+                            result = PostingsList.andOperation(result, child.execute(dictionary));
                         }
                         break;
                     case SHOULD:
                         for(Query child : childOccurence.getValue()) {
-                            result = PostingsList.orOperation(result, child.execute());
+                            result = PostingsList.orOperation(result, child.execute(dictionary));
                         }
                         break;
                     case MUST_NOT:

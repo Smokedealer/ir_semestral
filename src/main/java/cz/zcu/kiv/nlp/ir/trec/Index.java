@@ -3,11 +3,14 @@ package cz.zcu.kiv.nlp.ir.trec;
 import cz.zcu.kiv.nlp.ir.trec.data.Document;
 import cz.zcu.kiv.nlp.ir.trec.data.Result;
 import cz.zcu.kiv.nlp.ir.trec.dataStructures.IndexDictionary;
+import cz.zcu.kiv.nlp.ir.trec.dataStructures.PostingsList;
 import cz.zcu.kiv.nlp.ir.trec.logic.QParser;
+import cz.zcu.kiv.nlp.ir.trec.logic.Query;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.cz.CzechAnalyzer;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -62,7 +65,8 @@ public class Index implements Indexer, Searcher {
     }
 
     public List<Result> search(String query) {
-        //  todo implement
+        Query q = parser.parseQuery(query);
+        PostingsList lists = q.execute(dictionary);
         return null;
     }
 }

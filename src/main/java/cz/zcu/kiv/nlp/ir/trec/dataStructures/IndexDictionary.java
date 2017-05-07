@@ -52,8 +52,10 @@ public class IndexDictionary implements Serializable {
 
         PostingsList postingsList = this.dictionary.get(termFrequencyPair.getKey());
         if(postingsList == null){
-            postingsList = new PostingsList();
-            this.dictionary.put(termFrequencyPair.getKey(), postingsList);
+            final String termText = termFrequencyPair.getKey();
+
+            postingsList = new PostingsList(termText);
+            this.dictionary.put(termText, postingsList);
         }
         postingsList.addPosting(new Posting(documentId, termFrequencyPair.getValue()));
     }

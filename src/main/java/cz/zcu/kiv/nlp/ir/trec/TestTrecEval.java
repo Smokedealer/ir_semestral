@@ -74,9 +74,10 @@ public class TestTrecEval {
             //index.saveDictionary();
         }
 
-        QParser p = new QParser();
-        Query query = p.parseQuery("(pornografie AND zdarma AND web) OR (martin AND sex)");
-        PostingsList list = query.execute();
+          index.search("pornografie AND zdarma AND web");
+//        QParser p = new QParser();
+//        Query query = p.parseQuery("(pornografie AND zdarma AND web) OR (martin AND sex)");
+//        PostingsList list = query.execute();
 
 
 
